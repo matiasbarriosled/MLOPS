@@ -47,6 +47,7 @@ def index():
 
 @app.get('/cantidad_filmaciones_mes/{mes}')
 def cantidad_filmaciones_mes(mes: str):
+    
     return "cantidad de filmaciones por mes"
 
 
