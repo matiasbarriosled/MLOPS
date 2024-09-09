@@ -47,6 +47,7 @@ def index():
 
 @app.get('/cantidad_filmaciones_mes/{mes}')
 def cantidad_filmaciones_mes(mes: str):
+    """esta funcion debe devolver la cantidad de peliculas estrenadas en determinado mes"""
     peliculas = pd.read_parquet("consultas/movies.parquet")
     mes_input = mes.capitalize()
     cant = peliculas['mes'].value_counts()[mes_input]
@@ -55,6 +56,7 @@ def cantidad_filmaciones_mes(mes: str):
 
 @app.get('/cantidad_filmaciones_dia/{dia}')
 def cantidad_filmaciones_dia(dia: str):
+    """esta funcion debe devolver la cantidad de peliculas estrenadas en determinado dia"""
     peliculas = pd.read_parquet("consultas/movies.parquet")
     dia_input = dia.capitalize()
     cant = peliculas['dia_semana'].value_counts()[dia_input]
