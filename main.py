@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse 
 import pandas as pd
+import random
 
 app = FastAPI()
 
@@ -102,12 +103,14 @@ def votos_titulo(titulo: str):
     avisando que no cumple esta condición y que por ende, no se devuelve ningun valor:
         Ejemplo de retorno: La película X fue estrenada en el año X. La misma cuenta
         con un total de X valoraciones, con un promedio de X"""
+    
     peliculas = pd.read_parquet("consultas/movies.parquet")
     titulo_input = titulo.lower()
     busqueda = peliculas[peliculas['title'].str.lower()==titulo_input]
-    if busqueda.empty:
-        def busquedas_anidadas(lista):
+
+    def busquedas_anidadas(lista):
             return ', '.join(map(str,lista))
+    if busqueda.empty:
         posible_busqueda = peliculas[peliculas['title'].str.lower().str.contains(titulo_input)]
         coincidencias = int(posible_busqueda.shape[0])
         lista_titulos = list(posible_busqueda['title'])
@@ -120,7 +123,10 @@ def votos_titulo(titulo: str):
         promedio_votos = float(busqueda['vote_average'].values[0])
         return f" el titulo {titulo} tiene en total {cantidad_votos} votos con un promedio de {promedio_votos}"
     else:
-        return "Su busqueda no cumple con las condiciones, no hay valores a devolver"
+        sugerencias = peliculas[peliculas['vote_count']>2000]
+        sugerencias = list(sugerencias['title'])
+        sugerencias_random = random.sample(sugerencias,3)
+        return f"Su busqueda no cumple con las condiciones, no hay valores a devolver. Aqui algunas sugerencias que cumplen con los requisitos: {sugerencias_random}"
 
 
 @app.get('/nombre_actor/{actor}')
