@@ -47,18 +47,36 @@ def index():
 
 @app.get('/cantidad_filmaciones_mes/{mes}')
 def cantidad_filmaciones_mes(mes: str):
-    
-    return "cantidad de filmaciones por mes"
+    peliculas = pd.read_parquet("consultas/movies.parquet")
+    mes_input = mes.capitalize()
+    cant = peliculas['mes'].value_counts()[mes_input]
+    return f"en el mes de {mes_input} fueron estrenadas {int(cant)} películas"
 
 
 @app.get('/cantidad_filmaciones_dia/{dia}')
 def cantidad_filmaciones_dia(dia: str):
-    return "cantidad de filmaciones por mes"
+    peliculas = pd.read_parquet("consultas/movies.parquet")
+    dia_input = dia.capitalize()
+    cant = peliculas['dia_semana'].value_counts()[dia_input]
+    return f"Los dias {dia_input} se estrenaron {int(cant)} películas"
 
 
 @app.get('/score_titulo/{titulo}')
 def score_titulo(titulo: str):
-    return None
+    peliculas = pd.read_parquet("consultas/movies.parquet")
+    titulo_input = titulo.lower()
+    busqueda = peliculas[peliculas['title'].str.lower()==titulo_input]
+    if busqueda.empty:
+        def busquedas_anidadas(lista):
+            return ', '.join(map(str,lista))
+        posible_busqueda = peliculas[peliculas['title'].str.lower().str.contains(titulo_input)]
+        coincidencias = int(posible_busqueda.shape[0])
+        lista_titulos = list(posible_busqueda['title'])
+        return f"tu busqueda obtuvo {coincidencias} coincidencias: {busquedas_anidadas(lista_titulos)}"
+    titulo = str(busqueda['title'].values[0])
+    anio = int(busqueda['anio'].values[0])
+    score = float(busqueda['popularity'].values[0])
+    return f" el titulo {titulo} se estreno el año {anio} y hasta el dia de hoy tiene un score de {score}"
 
 @app.get('/votos_titulo/{titulo}')
 def votos_titulo(titulo: str):
