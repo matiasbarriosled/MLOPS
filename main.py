@@ -47,7 +47,11 @@ def index():
 
 @app.get('/cantidad_filmaciones_mes/{mes}')
 def cantidad_filmaciones_mes(mes: str):
-    """esta funcion debe devolver la cantidad de peliculas estrenadas en determinado mes"""
+    """def cantidad_filmaciones_mes( Mes ): Se ingresa un mes en idioma Español.
+    Debe devolver la cantidad de películas que fueron estrenadas en el mes 
+    consultado en la totalidad del dataset:
+        Ejemplo de retorno: X cantidad de películas fueron estrenadas en el mes de X"""
+    
     peliculas = pd.read_parquet("consultas/movies.parquet")
     mes_input = mes.capitalize()
     cant = peliculas['mes'].value_counts()[mes_input]
@@ -56,7 +60,11 @@ def cantidad_filmaciones_mes(mes: str):
 
 @app.get('/cantidad_filmaciones_dia/{dia}')
 def cantidad_filmaciones_dia(dia: str):
-    """esta funcion debe devolver la cantidad de peliculas estrenadas en determinado dia"""
+    """def cantidad_filmaciones_dia( Dia ): Se ingresa un día en idioma Español. 
+    Debe devolver la cantidad de películas que fueron estrenadas en día 
+    consultado en la totalidad del dataset:
+        Ejemplo de retorno: X cantidad de películas fueron estrenadas en los días X"""
+    
     peliculas = pd.read_parquet("consultas/movies.parquet")
     dia_input = dia.capitalize()
     cant = peliculas['dia_semana'].value_counts()[dia_input]
@@ -65,6 +73,10 @@ def cantidad_filmaciones_dia(dia: str):
 
 @app.get('/score_titulo/{titulo}')
 def score_titulo(titulo: str):
+    """def score_titulo( titulo_de_la_filmación ): Se ingresa el título de una 
+    filmación esperando como respuesta el título, el año de estreno y el score.
+        Ejemplo de retorno: La película X fue estrenada en el año X con un score/popularidad de X"""
+    
     peliculas = pd.read_parquet("consultas/movies.parquet")
     titulo_input = titulo.lower()
     busqueda = peliculas[peliculas['title'].str.lower()==titulo_input]
@@ -80,15 +92,54 @@ def score_titulo(titulo: str):
     score = float(busqueda['popularity'].values[0])
     return f" el titulo {titulo} se estreno el año {anio} y hasta el dia de hoy tiene un score de {score}"
 
+
 @app.get('/votos_titulo/{titulo}')
 def votos_titulo(titulo: str):
-    return None
+    """def votos_titulo( titulo_de_la_filmación ): Se ingresa el título de una 
+    filmación esperando como respuesta el título, la cantidad de votos y el 
+    valor promedio de las votaciones. La misma variable deberá de contar con 
+    al menos 2000 valoraciones, caso contrario, debemos contar con un mensaje 
+    avisando que no cumple esta condición y que por ende, no se devuelve ningun valor:
+        Ejemplo de retorno: La película X fue estrenada en el año X. La misma cuenta
+        con un total de X valoraciones, con un promedio de X"""
+    peliculas = pd.read_parquet("consultas/movies.parquet")
+    titulo_input = titulo.lower()
+    busqueda = peliculas[peliculas['title'].str.lower()==titulo_input]
+    if busqueda.empty:
+        def busquedas_anidadas(lista):
+            return ', '.join(map(str,lista))
+        posible_busqueda = peliculas[peliculas['title'].str.lower().str.contains(titulo_input)]
+        coincidencias = int(posible_busqueda.shape[0])
+        lista_titulos = list(posible_busqueda['title'])
+        return f"tu busqueda obtuvo {coincidencias} coincidencias: {busquedas_anidadas(lista_titulos)}"
+
+
+    elif int(busqueda['vote_count'].values[0])>2000:
+        cantidad_votos = int(busqueda['vote_count'].values[0])
+        titulo = str(busqueda['title'].values[0])
+        promedio_votos = float(busqueda['vote_average'].values[0])
+        return f" el titulo {titulo} tiene en total {cantidad_votos} votos con un promedio de {promedio_votos}"
+    else:
+        return "Su busqueda no cumple con las condiciones, no hay valores a devolver"
 
 
 @app.get('/nombre_actor/{actor}')
 def nombre_actor(actor: str):
+    """def get_actor( nombre_actor ): Se ingresa el nombre de un actor que se 
+    encuentre dentro de un dataset debiendo devolver el éxito del mismo medido 
+    a través del retorno. Además, la cantidad de películas que en las que ha 
+    participado y el promedio de retorno. La definición no deberá considerar directores:
+        Ejemplo de retorno: El actor X ha participado de X cantidad de filmaciones, el 
+        mismo ha conseguido un retorno de X con un promedio de X por filmación"""
+
     return None
+
 
 @app.get('/nombre_director/{director}')
 def nombre_director(director: str):
+    """def get_director( nombre_director ): Se ingresa el nombre de un director 
+    que se encuentre dentro de un dataset debiendo devolver el éxito del mismo 
+    medido a través del retorno. Además, deberá devolver el nombre de cada 
+    película con la fecha de lanzamiento, retorno individual, costo y ganancia de la misma."""
+
     return None
