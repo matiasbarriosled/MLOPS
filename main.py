@@ -126,7 +126,7 @@ def votos_titulo(titulo: str):
         sugerencias = peliculas[peliculas['vote_count']>2000]
         sugerencias = list(sugerencias['title'])
         sugerencias_random = random.sample(sugerencias,3)
-        return f"Su busqueda no cumple con las condiciones, no hay valores a devolver. Aqui algunas sugerencias que cumplen con los requisitos: {sugerencias_random}"
+        return f"Su busqueda no cumple con las condiciones, no hay valores a devolver. Aqui algunas sugerencias que cumplen con los requisitos: {busquedas_anidadas(sugerencias_random)}"
 
 
 @app.get('/nombre_actor/{actor}')
