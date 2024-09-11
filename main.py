@@ -137,8 +137,19 @@ def nombre_actor(actor: str):
     participado y el promedio de retorno. La definición no deberá considerar directores:
         Ejemplo de retorno: El actor X ha participado de X cantidad de filmaciones, el 
         mismo ha conseguido un retorno de X con un promedio de X por filmación"""
-
-    return None
+    
+    actores = pd.read_parquet("consultas/actores.parquet")
+    if actor in actores.name.values:
+        peliculas = pd.read_parquet("consultas/movies.parquet")
+        actores = actores.loc[actores.name == actor]
+        suma = actores.shape[0]
+        lista_peliculas = list(actores.id_pelicula)
+        peliculas = peliculas[peliculas.id.isin(lista_peliculas)]
+        retorno = "{:.2f}".format(peliculas.retorno.sum())
+        promedio = "{:.2f}".format(peliculas.retorno.mean())
+        return f"El actor {actor} a participado en {suma} peliculas, de las cuales ha obtenido {retorno} de retorno total, dando un promedio de {promedio} con todas las peliculas"
+    else:
+        return f"no se encontro resultados con el nombre: {actor}"
 
 
 @app.get('/nombre_director/{director}')
