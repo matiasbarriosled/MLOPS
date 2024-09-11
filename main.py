@@ -159,4 +159,17 @@ def nombre_director(director: str):
     medido a través del retorno. Además, deberá devolver el nombre de cada 
     película con la fecha de lanzamiento, retorno individual, costo y ganancia de la misma."""
 
-    return None
+    directores = pd.read_parquet("consultas/directores.parquet")
+    if director in directores.name.values:
+        peliculas = pd.read_parquet("consultas/movies.parquet")
+        directores = directores.loc[directores.name == director]
+        suma = directores.shape[0]
+        lista_peliculas = list(directores.id_pelicula)
+        peliculas = peliculas[peliculas.id.isin(lista_peliculas)]
+        retorno = "{:.2f}".format(peliculas.retorno.sum())
+        pelis_title = ""
+        for i, row in peliculas.iterrows():
+            pelis_title += f"| {row.title}: COSTO ${row.budget} - GANANCIA ${row.revenue} | . "
+        return f"El director {director} a participado en {suma} peliculas, de las cuales ha obtenido {retorno} de retorno total. Peliculas que ha realizado: {pelis_title}"
+    else:
+        return f"no se encontro resultados con el nombre: {director}"
