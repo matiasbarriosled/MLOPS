@@ -169,7 +169,7 @@ def nombre_director(director: str):
         retorno = "{:.2f}".format(peliculas.retorno.sum())
         pelis_title = ""
         for i, row in peliculas.iterrows():
-            pelis_title += f"| {row.title}: COSTO ${row.budget} - GANANCIA ${row.revenue} | . "
+            pelis_title += f" {row.title.upper()}: costo ${row.budget} y ganancia de ${row.revenue} ."
         return f"El director {director} a participado en {suma} peliculas, de las cuales ha obtenido {retorno} de retorno total. Peliculas que ha realizado: {pelis_title}"
     else:
         return f"no se encontro resultados con el nombre: {director}"
