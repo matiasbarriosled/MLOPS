@@ -203,7 +203,7 @@ def get_vectorized_catcols(df):
     features = np.column_stack([genero1_v.toarray(),genero2_v.toarray(), df['runtime'],df['vote_average']])
     return features
 
-
+@app.get('/recomendacion/{titulo}')
 def recomendacion(titulo:str):
     """ """
     from sklearn.metrics.pairwise import cosine_similarity
