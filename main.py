@@ -173,3 +173,59 @@ def nombre_director(director: str):
         return f"El director {director} a participado en {suma} peliculas, de las cuales ha obtenido {retorno} de retorno total. Peliculas que ha realizado: {pelis_title}"
     else:
         return f"no se encontro resultados con el nombre: {director}"
+    
+
+
+################################################################################################################################################################
+################################################################################################################################################################
+
+#funciones creadas con el proposito de modularizar y facilitar el proceso del codigo
+def get_sample_df(titulo):
+    import pandas as pd
+    movies_ml = pd.read_parquet("eda/dataset/consultas_ml") #corregir
+    movie = movies_ml[movies_ml['title']==titulo]
+    movies_ml = movies_ml.sample(n=4000).reset_index(drop=True)
+    movies_ml = movies_ml._append(movie, ignore_index=True)
+    return {'df':movies_ml, 'movie':movie}
+
+def get_vectorized_catcols(df):
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    import numpy as np
+
+    vectorizer= TfidfVectorizer()
+    from sklearn.preprocessing import LabelEncoder
+
+    genero1_v = vectorizer.fit_transform(df['genero1'])
+    genero2_v = vectorizer.fit_transform(df['genero2'])
+    #me traia muchas sugerencias sin sentido, ya que hay menos secuelas que peliculas autoconclusivas por lo que decidi comentar esta caracteristica y quitarla del modelo
+    #name_col_v = vectorizer.fit_transform(df['name_collection'])
+
+    features = np.column_stack([genero1_v.toarray(),genero2_v.toarray(), df['runtime'],df['vote_average']])
+    return features
+
+
+def recomendacion(titulo:str):
+    """ """
+    from sklearn.metrics.pairwise import cosine_similarity
+    import numpy as np
+
+    dic_movie = get_sample_df(titulo)
+    features = get_vectorized_catcols(dic_movie['df'])
+    matriz_similar = cosine_similarity(features)
+
+    df = dic_movie['df']
+    peli = df[df['title']==titulo]
+    
+    if not peli.empty:
+        indice = peli.index[0]
+        similares = matriz_similar[indice]
+        peliculas_similares_indices = np.argsort(-similares)
+        
+        peliculas_similares = df.loc[peliculas_similares_indices[1:6],'title'].values
+
+        print(peliculas_similares)
+        #return peliculas_similares
+    else:
+        print("sin coincidencias")
+
+    
