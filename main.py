@@ -224,7 +224,7 @@ def recomendacion(titulo:str):
         peliculas_similares = df.loc[peliculas_similares_indices[1:6],'title'].values
 
         #print(peliculas_similares)
-        return peliculas_similares
+        return list(peliculas_similares)
     else:
         print("sin coincidencias")
 
