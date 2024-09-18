@@ -2,3 +2,4 @@ env/
 __pycache__/
 etl/dataset
 prueba.ipynb
+README.md

@@ -182,7 +182,7 @@ def nombre_director(director: str):
 #funciones creadas con el proposito de modularizar y facilitar el proceso del codigo
 def get_sample_df(titulo):
     import pandas as pd
-    movies_ml = pd.read_parquet("eda/dataset/consultas_ml") #corregir
+    movies_ml = pd.read_parquet("consultas/consultas_ml") #corregir
     movie = movies_ml[movies_ml['title']==titulo]
     movies_ml = movies_ml.sample(n=4000).reset_index(drop=True)
     movies_ml = movies_ml._append(movie, ignore_index=True)
@@ -205,7 +205,7 @@ def get_vectorized_catcols(df):
 
 @app.get('/recomendacion/{titulo}')
 def recomendacion(titulo:str):
-    """ """
+    """ def recomendacion( titulo:str ): Se ingresa el nombre de una película y te recomienda las similares en una lista de 5 valores. """
     from sklearn.metrics.pairwise import cosine_similarity
     import numpy as np
 
