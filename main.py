@@ -20,23 +20,21 @@ def index():
 </head>
 <style>
 
-  body{
-    background-color:yellow
-  }
+    body{
+        margin: 20px;
+        background-color:yellow
+    }
+    .center {
+		display: block;
+		margin: 20px;
+
+    }
 
 </style>
 <body>
-  <h1>Hola Mundo!!!</h1>
-  <h6>En este espacio lo voy a rellenar con cosas... cuales no se aun</h6>
-  <p>
-  credula postero dolo asit quasi men parabellum nome nomelorem ipsum dolo asit quasi men parabellum nome nome deje quan mininum credula postero dolo asit quasi men parabellum nome nome deje
-  asit quasi men parabellum nome nome deje lorem ipsum dolo asit quasi men parabellum nome nome deje quan mininum credula postero dolo asit quasi men parabellum nome nome deje
-  lorem ipsum dolo asit quasi men parabellum men parabellum nome nome deje quan mininum credula postero dolo a parabellum nome nome deje
-  lorem ipsum dolo asit quasi men parabellum nome nome deje quan mininum credula postero dolo asit quasi men parabellum nome nome deje</p>
-  men parabellum nome nome deje quan mininum credula postero dolo alorem ipsum dolo asit quasi men parabellum nome nome deje quan mininum credula postero dolo asit quasi men parabellum nome nome deje
-  lorem ipsum dolo asit quasi men parabellum nome nome deje quan mininum credula postero dolo asit quasi men parabellum nome nome deje
-   dolo asit quasi men parabellum nome nome deje dolo asit quasi men parabellum nome nome deje dolo asit quasi men parabellum nome nome deje
-  <div class=""><a href="https://pi1-mlops-vv02.onrender.com/docs" target="_blank"> #SoyHenry </a></div>
+	<img src="src/Pelisplus.png" alt="Imagen" class="center">
+	<h2 class="center">Ingresar al siguiente enlace para ver la documentacion</h2>
+	<p class="center"><strong><a href="https://mlops-1-o7gj.onrender.com/docs">Docs</a></strong></p>
   <br>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
